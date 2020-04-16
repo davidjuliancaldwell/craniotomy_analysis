@@ -33,8 +33,8 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-#iteration_series = range(2,length_data,1)
-iteration_series = [0,1]
+iteration_series = range(0,11,1)
+#iteration_series = [0,1]
 
 for select in iteration_series:
     # Read the original series. First obtain the series file names using the
@@ -74,8 +74,9 @@ for select in iteration_series:
     orig_spacing = image3D.GetSpacing()
     min_orig = min(orig_spacing)
     max_orig = max(orig_spacing)
+    intermed_spacing = 2.0
 
-    image3D_resample = resample_itk_image.resample_img(image3D,[max_orig,max_orig,max_orig])
+    image3D_resample = resample_itk_image.resample_img(image3D,[intermed_spacing,intermed_spacing,intermed_spacing])
 
     print('Resampled Image Spacing ',image3D_resample.GetSpacing())
     print('Resampled Image Size ', image3D_resample.GetSize())
@@ -112,7 +113,7 @@ for select in iteration_series:
     #print(stats)
 
     # lower and upper intensity thresholds for segmentation
-    lower_threshold = 200
+    lower_threshold = 500
     upper_threshold = 1800
 
     # intialize distance map
@@ -150,7 +151,7 @@ for select in iteration_series:
 
 
     # lower and upper intensity thresholds for segmentation
-    lower_threshold = 200
+    lower_threshold = 500
     upper_threshold = 1800
 
     # intialize distance map
@@ -188,5 +189,5 @@ for select in iteration_series:
     #shape_stats.GetPhysicalSize(1)
 
     # Write the image.
-    output_file_name_3D = os.path.join(OUTPUT_DIR, 'segmentation_test.nii.gz')
+    output_file_name_3D = os.path.join(OUTPUT_DIR, 'segmentation.nii')
     sitk.WriteImage(ls_thresh_resize, output_file_name_3D)
