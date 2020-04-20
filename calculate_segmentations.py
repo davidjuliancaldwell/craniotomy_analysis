@@ -4,6 +4,7 @@ import os
 import resample_itk_image
 from itertools import chain
 import pandas as pd
+import time
 
 # PC
 data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
@@ -33,8 +34,8 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-iteration_series = range(0,11,1)
-#iteration_series = [0,1]
+iteration_series = range(0,21,1)
+#iteration_series = [0]
 
 for select in iteration_series:
     # Read the original series. First obtain the series file names using the
@@ -112,6 +113,7 @@ for select in iteration_series:
     #upper_threshold = stats.GetMean(1)+factor*stats.GetSigma(1)
     #print(stats)
 
+    start_time = time.time()
     # lower and upper intensity thresholds for segmentation
     lower_threshold = 500
     upper_threshold = 1800
@@ -123,7 +125,7 @@ for select in iteration_series:
     lsFilter = sitk.ThresholdSegmentationLevelSetImageFilter()
     lsFilter.SetLowerThreshold(lower_threshold)
     lsFilter.SetUpperThreshold(upper_threshold)
-    lsFilter.SetMaximumRMSError(0.01)
+    lsFilter.SetMaximumRMSError(0.007)
     lsFilter.SetNumberOfIterations(1000)
     lsFilter.SetCurvatureScaling(1)
     lsFilter.SetPropagationScaling(1)
@@ -142,6 +144,9 @@ for select in iteration_series:
     # print results
     print(lsFilter)
 
+    elapsed_time = time.time() - start_time
+    print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+
     #myshow(sitk.LabelOverlay(recast_image3D, ls>0))
     # extract >0 values for segmentation
     ls_thresh = ls>0
@@ -149,6 +154,7 @@ for select in iteration_series:
     image3D_resample_seq_intermed = resample_itk_image.resample_img_set_back_orig(ls_thresh,orig_spacing,orig_size,True)
     image3D_resample_seq = resample_itk_image.resample_img(image3D_resample_seq_intermed,[min_orig,min_orig,min_orig],True)
 
+    start_time = time.time()
 
     # lower and upper intensity thresholds for segmentation
     lower_threshold = 500
@@ -161,7 +167,7 @@ for select in iteration_series:
     lsFilterSeq = sitk.ThresholdSegmentationLevelSetImageFilter()
     lsFilterSeq.SetLowerThreshold(lower_threshold)
     lsFilterSeq.SetUpperThreshold(upper_threshold)
-    lsFilterSeq.SetMaximumRMSError(0.005)
+    lsFilterSeq.SetMaximumRMSError(0.003)
     lsFilterSeq.SetNumberOfIterations(1000)
     lsFilterSeq.SetCurvatureScaling(1)
     lsFilterSeq.SetPropagationScaling(1)
@@ -172,6 +178,9 @@ for select in iteration_series:
 
     # print results
     print(lsFilterSeq)
+
+    elapsed_time = time.time() - start_time
+    print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
 
     #myshow(sitk.LabelOverlay(recast_image3D, ls>0))
     # extract >0 values for segmentation
