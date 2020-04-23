@@ -6,7 +6,7 @@ from itertools import chain
 import pandas as pd
 import time
 
-lower_threshold = 500
+lower_threshold = 300
 upper_threshold = 1800
 
 # PC
@@ -37,8 +37,7 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-iteration_series = range(137,length_data,1)
-iteration_series = [93,94]
+iteration_series = range(94,95,1)
 
 for select in iteration_series:
     # Read the original series. First obtain the series file names using the
@@ -118,5 +117,5 @@ for select in iteration_series:
     print('\n')
 
     # Write the image.
-    output_file_name_3D = os.path.join(OUTPUT_DIR, 'segmentation_thresh.nii')
+    output_file_name_3D = os.path.join(OUTPUT_DIR, 'segmentation_thresh_300_1800.nii')
     sitk.WriteImage(final_cleaned, output_file_name_3D)
