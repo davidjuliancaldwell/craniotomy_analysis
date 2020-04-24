@@ -9,6 +9,8 @@ import time
 lower_threshold = 500
 upper_threshold = 1800
 
+resample = False
+
 # PC
 data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
@@ -80,28 +82,30 @@ for select in iteration_series:
     min_orig = min(orig_spacing)
     max_orig = max(orig_spacing)
 
-    if max_orig > 50:
-        print('Error: File ',select,' may have extra dicom file, move -0001 to another folder, try again','\n')
-        exit()
+    print(max_orig)
 
-    image3D_resample_seq = resample_itk_image.resample_img(image3D,[min_orig,min_orig,min_orig])
+    if resample:
+        if max_orig > 50:
+            print('Error: File ',select,' may have extra dicom file, move -0001 to another folder, try again','\n')
+            exit()
 
-    print('Resampled Image Spacing For Sequential ',image3D_resample_seq.GetSpacing())
-    print('Resampled Image Size For Sequential', image3D_resample_seq.GetSize())
+        image3D_resample_seq = resample_itk_image.resample_img(image3D,[min_orig,min_orig,min_orig])
 
-    # recast types as necessary for analysis
+        print('Resampled Image Spacing For Sequential ',image3D_resample_seq.GetSpacing())
+        print('Resampled Image Size For Sequential', image3D_resample_seq.GetSize())
 
-    start_time = time.time()
+        # recast types as necessary for analysis
 
-    # binary closing to smooth out skull
-    if min_orig <0.6:
-        vectorRadius=(3,3,3)
-    else:
-        vectorRadius=(2,2,2)
+        start_time = time.time()
 
-    print('Morphological Closing radius = ',vectorRadius)
+        # binary closing to smooth out skull
+        if min_orig <0.6:
+            vectorRadius=(3,3,3)
+        else:
+            vectorRadius=(2,2,2)
 
-
-    elapsed_time = time.time() - start_time
-    print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+        print('Morphological Closing radius = ',vectorRadius)
+        elapsed_time = time.time() - start_time
+        print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
+        
     print('\n')
