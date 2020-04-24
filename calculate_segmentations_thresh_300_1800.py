@@ -37,7 +37,7 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-iteration_series = range(94,95,1)
+iteration_series = range(137,139,1)
 
 for select in iteration_series:
     # Read the original series. First obtain the series file names using the
