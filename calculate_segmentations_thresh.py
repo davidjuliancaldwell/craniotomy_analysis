@@ -10,16 +10,16 @@ lower_threshold = 500
 upper_threshold = 1800
 
 # PC
-data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
+data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\Wadlington_William_Harrel"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
 
 # create output directories if they don't exist
 
-#for root, dirs, files in os.walk(data_folder, topdown=True):
-    # walking tips from https://stackoverflow.com/questions/42720627/python-os-walk-to-certain-level
-#    if root[len(data_folder):].count(os.sep) == 2:
-#        if not (os.path.exists(os.path.join(root,'output'))):
-#            os.mkdir(os.path.join(root,'output'))
+for root, dirs, files in os.walk(data_folder, topdown=True):
+   #walking tips from https://stackoverflow.com/questions/42720627/python-os-walk-to-certain-level
+ if root[len(data_folder):].count(os.sep) == 2:
+      if not (os.path.exists(os.path.join(root,'output'))):
+          os.mkdir(os.path.join(root,'output'))
 
 # generate structure of files
 
@@ -37,8 +37,8 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-iteration_series = range(137,length_data,1)
-iteration_series = [141]
+iteration_series = range(0,length_data,1)
+#iteration_series = []
 
 for select in iteration_series:
     # Read the original series. First obtain the series file names using the

@@ -7,7 +7,7 @@ import pandas as pd
 import time
 
 # PC
-data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
+data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\news_for_olds"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
 
 # create output directories if they don't exist
@@ -48,5 +48,4 @@ for select in iteration_series:
     if not series_IDs:
         print("ERROR: given directory \""+data_folder+"\" does not contain a DICOM series.")
     print('File # ',select)
-
-    
+    print('\n')
