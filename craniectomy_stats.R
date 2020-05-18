@@ -15,13 +15,13 @@ here()
 
 # if wanting to select only good scans 
 select_subset = TRUE
-save_plot = TRUE
+save_plot = FALSE
 
-data_file_excel <- "Kempe-CTScansWithDemograph_DATA_2020-05-15_1207.csv"
+data_file_excel <- "Kempe-CTScansWithDemograph_DATA_2020-05-18_1359.csv"
 crani_e_data <- read.csv(file=data_file_excel, header=TRUE, sep=",",na.strings=c(""))
 
 #crani_e_data <- crani_e_data %>% filter(record_id != 125 & record_id != 119)
-#crani_e_data <- crani_e_data %>% filter(record_id != 119)
+crani_e_data <- crani_e_data %>% filter(record_id != 125)
 
 
 crani_e_data$abs_diff <- crani_e_data$crani_size_inner - crani_e_data$crani_size_outer
@@ -32,7 +32,8 @@ crani_e_data <- crani_e_data %>% mutate(ebl_cplasty = as.numeric(ebl_cplasty),
                                         or_time = as.numeric(or_time),
                         ebl = as.numeric(ebl),
                         surgery_duration = as.numeric(surgery_duration),
-                        daysto_copasty = as.numeric((daysto_copasty)))
+                        daysto_copasty = as.numeric((daysto_copasty)),
+                        sex = as.factor(sex))
 
 if (select_subset){
 crani_e_data <- crani_e_data %>% filter(thin_ct == 1)
@@ -59,7 +60,7 @@ summary_data <- crani_e_data %>% group_by(crani_type2) %>% summarize(min_diff=mi
 summary_data_demo <- crani_e_data %>% group_by(crani_type2) %>% summarise(med =sprintf("%0.1f",mean(ebl_cplasty,na.rm=TRUE)),std = sprintf("%0.1f",sd(ebl_cplasty,na.rm=TRUE)))
 
 
-data_model <- lm(crani_size_outer ~ crani_size_inner + crani_type2 ,data=crani_e_data)
+data_model <- lm(crani_size_outer ~ crani_size_inner + crani_type2 + sex + age ,data=crani_e_data)
 summary(data_model)
 
 data_model_abs_diff <- lm(abs_diff ~ crani_type2,data=crani_e_data)
@@ -73,7 +74,6 @@ summary(data_initial_only)
 
 a<- kruskal.test(abs_diff ~ crani_type2,data=crani_e_data)
 
-pwc <- emmeans(data_model,specs=pairwise ~crani_type2:crani_size_outer)
 data_model.emm <- emmeans(data_model,"crani_type2")
 pwpm(data_model.emm)
 pwpp(data_model.emm)
@@ -162,6 +162,24 @@ if (save_plot){
   }
   else{
     ggsave("distrib_final_v2.png", units="in", width=5, height=4, dpi=600)
+  }
+}
+
+plot6 <- ggplot(crani_e_data,aes(x=crani_size_inner,group=crani_type2,fill=crani_type2)) +
+  geom_histogram(position="stack",bins=20) + 
+  labs(x="Absolute difference in mm^3",y="Count",title = "Distribution of Volume Differences") +
+#  coord_cartesian(xlim=c(0,max(crani_e_data$abs_diff)+1000))  + 
+  theme_bw() + 
+  scale_fill_discrete(name="Type of\nSurgery",breaks=c("0","1"),labels=c("Reverse ? Mark","Kempe")) +
+  facet_grid(vars(sex))
+print(plot6)
+
+if (save_plot){
+  if (select_subset){
+    ggsave("distrib_gender_subset_v2.png", units="in", width=5, height=4, dpi=600)
+  }
+  else{
+    ggsave("distrib_gender_v2.png", units="in", width=5, height=4, dpi=600)
   }
 }
 

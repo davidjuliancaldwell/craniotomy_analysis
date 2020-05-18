@@ -10,7 +10,7 @@ lower_threshold = 500
 upper_threshold = 1800
 
 # PC
-data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\Wadlington_William_Harrel"
+data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\Lacey_Lawrence_Anthony"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
 
 # create output directories if they don't exist
