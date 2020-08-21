@@ -7,7 +7,7 @@ import pandas as pd
 import time
 
 # PC
-data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
+data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subject_data"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
 
 # create output directories if they don't exist

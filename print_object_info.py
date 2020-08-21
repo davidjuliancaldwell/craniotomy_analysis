@@ -12,7 +12,7 @@ upper_threshold = 1800
 resample = False
 
 # PC
-data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subjectData"
+data_folder = r"C:\Users\david\UW\Ryan Kellogg - Kempe files\subject_data"
 data_folder = os.path.abspath(os.path.expanduser(os.path.expandvars(data_folder)))
 
 # create output directories if they don't exist
@@ -39,7 +39,7 @@ for data_subj, dirs, files in os.walk(data_folder, topdown=True):
 
 length_data = len(data_subj_list)
 
-iteration_series = range(0,length_data,1)
+iteration_series = range(13,length_data,1)
 #iteration_series = [0]
 
 for select in iteration_series:
@@ -107,5 +107,5 @@ for select in iteration_series:
         print('Morphological Closing radius = ',vectorRadius)
         elapsed_time = time.time() - start_time
         print(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))
-        
+
     print('\n')
